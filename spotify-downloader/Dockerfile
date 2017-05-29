@@ -1,13 +1,19 @@
-FROM ubuntu:16.04
+# execute that way
+#
+# docker run --rm -it -v /your/host/folder:/spotdl/Music spotify-dl:debian
 
-COPY spotdl spotdl
+FROM debian:wheezy-slim
 
-WORKDIR spotdl
-
-RUN set -eux pipefail; apt-get update && apt-get install \
+RUN set -eux pipefail; apt-get update && apt-get install --no-install-recommends \
+    git \
     libav-tools \
-    python3-pip -yq && \
-    pip3 install -U -r requirements.txt && \
+    ca-certificates \
+    python-pip -y && \
+    git clone https://github.com/Ritiek/Spotify-Downloader.git spotdl && \
+    cd spotdl && \
+    pip install -U -r requirements.txt && \
     rm -rf /var/lib/apt/lists/*
 
-CMD ["python3", "spotdl.py"]
+WORKDIR /spotdl
+
+CMD ["python", "spotdl.py"]
