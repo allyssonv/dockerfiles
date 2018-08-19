@@ -8,15 +8,12 @@ WORKDIR /scdl
 
 RUN set -ex; \
 	apk update --no-cache && \
-	apk add --no-cache python3; \
+	apk add --no-cache python3 && \
+	addgroup -g 1000 -S jarvis && \
+	adduser -u 1000 -S jarvis -G jarvis && \
 	python3 setup.py install
+
+USER jarvis
 
 ENTRYPOINT ["scdl", "-l"]
 CMD []
-
-
-######################RUN AS######################
-
-# Pass as parameter the LINK ADDRESS of the song
-
-# docker run --rm -it -v /home/user:/scdl scdl:flyingrub [LINK ADDRESS]
