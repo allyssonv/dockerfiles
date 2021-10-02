@@ -1,19 +1,13 @@
-FROM alpine:3.7
+FROM alpine:3.14.2
 
 LABEL maintainer="allysson.v1@gmail.com"
 
-COPY scdl /scdl
-
-WORKDIR /scdl
+WORKDIR /songs
 
 RUN set -ex; \
 	apk update --no-cache && \
-	apk add --no-cache python3 && \
-	addgroup -g 1000 -S jarvis && \
-	adduser -u 1000 -S jarvis -G jarvis && \
-	python3 setup.py install
-
-USER jarvis
+	apk add --no-cache git ffmpeg python3 py3-pip && \
+	pip3 install git+https://github.com/flyingrub/scdl
 
 ENTRYPOINT ["scdl", "-l"]
 CMD []
